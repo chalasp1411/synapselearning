@@ -1,0 +1,22 @@
+{
+	"name": "Adventureworksazuresql",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KVlkforsynapse",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "Adventureworksdbconnectionstring"
+			}
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

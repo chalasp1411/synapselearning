@@ -1,0 +1,34 @@
+{
+	"name": "ds_adk_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "KVforrealtimeadf",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@activity('lkforuspGetCopyActivitySQLToADLS').output.firstRow.CopyActivitySQLSinkFileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@activity('lkforuspGetCopyActivitySQLToADLS').output.firstRow.CopyActivitySQLSinkFolderPath",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@activity('lkforuspGetCopyActivitySQLToADLS').output.firstRow.CopyActivitySQLSinkContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

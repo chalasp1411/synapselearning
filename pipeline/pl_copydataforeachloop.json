@@ -1,0 +1,81 @@
+{
+	"name": "pl_copydataforeachloop",
+	"properties": {
+		"activities": [
+			{
+				"name": "uspGetCopyActivityExecutionList",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[uspGetCopyActivityExecutionList]",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_metadatadb",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "foreach_alltables",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "uspGetCopyActivityExecutionList",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('uspGetCopyActivityExecutionList').output.value",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "Executingchildpipeline",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "pl_copydatatoadls",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"CopyActivitySQLTable": {
+										"value": "@item().CopyActivitySQLTable",
+										"type": "Expression"
+									},
+									"CopyActivitySQLDBConnectionString": {
+										"value": "@item().CopyActivitySQLDBConnectionString",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-05-08T15:38:15Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

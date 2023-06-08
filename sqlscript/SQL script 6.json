@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 6",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [SalesOrderDetailID]\n,[SalesOrderID]\n,[OrderDate]\n,[DueDate]\n,[ShipDate]\n,[CustomerID]\n,[ShipToAddressID]\n,[BillToAddressID]\n,[ProductID]\n,[SalesOrderNumber]\n,[PurchaseOrderNumber]\n,[AccountNumber]\n,[OrderQty]\n,[UnitPrice]\n,[UnitPriceDiscount]\n,[LineTotal]\n FROM [dbo].[Factsalesorderdetail]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "synapseserverless",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

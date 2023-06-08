@@ -1,0 +1,117 @@
+{
+	"name": "pl_copydatatoadls",
+	"properties": {
+		"activities": [
+			{
+				"name": "copydatatoadls",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "lkforuspGetCopyActivitySQLToADLS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "@activity('lkforuspGetCopyActivitySQLToADLS').output.firstRow.CopyActivitySQLQuery",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_adk_table",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_adk_csv",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "lkforuspGetCopyActivitySQLToADLS",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[uspGetCopyActivitySQLToADLS]",
+						"storedProcedureParameters": {
+							"CopyActivitySQLTable": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().parameters.CopyActivitySQLTable",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_metadatadb",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"CopyActivitySQLTable": {
+				"type": "string",
+				"defaultValue": "SalesLT.ProductModel"
+			},
+			"CopyActivitySQLDBConnectionString": {
+				"type": "string",
+				"defaultValue": "Adventureworksdbconnectionstring"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-05-08T15:27:46Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

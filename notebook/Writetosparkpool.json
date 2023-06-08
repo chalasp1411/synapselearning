@@ -1,0 +1,165 @@
+{
+	"name": "Writetosparkpool",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "Sparkpool001",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "59973030-ec3a-41e1-b45b-7d3b3de745ea"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1"
+			},
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/8d6c58d4-83f0-4a29-aef2-63cfaf0f5d82/resourceGroups/ResourcegroupforDatafactory/providers/Microsoft.Synapse/workspaces/sakisri/bigDataPools/Sparkpool001",
+				"name": "Sparkpool001",
+				"type": "Spark",
+				"endpoint": "https://sakisri.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/Sparkpool001",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"from notebookutils import mssparkutils  "
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"\r\n",
+					"blob_sas_token = mssparkutils.credentials.getConnectionStringOrCreds(\"kvforrealtimeadf\") \r\n",
+					"\r\n",
+					"spark.conf.set('fs.azure.sas.commondata.realtimeforadf.blob.core.windows.net', blob_sas_token)"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"from pyspark.sql import SparkSession\r\n",
+					"from azure.storage.blob import BlobServiceClient\r\n",
+					"from azure.core.exceptions import ResourceExistsError\r\n",
+					"\r\n",
+					"blob_storage = \"wasbs://commondata@realtimeforadf.blob.core.windows.net\"\r\n",
+					"file_path = \"/Staging/Address/Address.csv\"\r\n",
+					"full_path = blob_storage+file_path\r\n",
+					"\r\n",
+					"df = spark.read.load(full_path,format=\"csv\",header=True)\r\n",
+					"display(df)"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df.write.mode(\"overwrite\").saveAsTable(\"Dimaddress\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				]
+			}
+		]
+	}
+}

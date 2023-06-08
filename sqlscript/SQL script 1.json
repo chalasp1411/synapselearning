@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://sakisri.dfs.core.windows.net/sakisri/synapse/2023-04-26T21_27_12._Address.csv',\n        FORMAT = 'CSV',\n        HEADER_ROW = TRUE,\n        PARSER_VERSION = '2.0'\n    ) AS [result]\n\ndrop view [dbo].[Pims_full]\n\nCREATE VIEW [dbo].[Viewaddress]\nAS\nSELECT  *\nFROM \nOPENROWSET(\n        BULK 'https://realtimeforadf.blob.core.windows.net/commondata/Transformdata/dimaddress/Dimaddress.csv',\n        --DATA_SOURCE = 'pimsondemand',\n        FORMAT = 'CSV',\n        HEADER_ROW = TRUE,\n        PARSER_VERSION = '2.0'\n    ) AS [result]\n\nselect * from [dbo].[Viewaddress]\n\n\nCREATE EXTERNAL TABLE [dbo].[]\nAS\nSELECT  *\nFROM \nOPENROWSET(\n        BULK 'https://realtimeforadf.blob.core.windows.net/commondata/Transformdata/dimaddress/Dimaddress.csv',\n        --DATA_SOURCE = 'pimsondemand',\n        FORMAT = 'CSV',\n        HEADER_ROW = TRUE,\n        PARSER_VERSION = '2.0'\n    ) AS [result]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "synapseserverless",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

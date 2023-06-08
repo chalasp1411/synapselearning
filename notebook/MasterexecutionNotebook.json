@@ -1,0 +1,167 @@
+{
+	"name": "MasterexecutionNotebook",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "Sparkpool001",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "b5562d60-2d65-4131-976c-241de07bbea4"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1"
+			},
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/8d6c58d4-83f0-4a29-aef2-63cfaf0f5d82/resourceGroups/ResourcegroupforDatafactory/providers/Microsoft.Synapse/workspaces/sakisri/bigDataPools/Sparkpool001",
+				"name": "Sparkpool001",
+				"type": "Spark",
+				"endpoint": "https://sakisri.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/Sparkpool001",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run /CustomFunctions"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df_DimNotebookexecutionlist = sqlContext.sql(\"\"\"\r\n",
+					"Select '/DimAddress' as NotebookName\r\n",
+					"Union all \r\n",
+					"Select '/DimCustomer' as NotebookName\r\n",
+					"Union all \r\n",
+					"Select '/DimProduct' as NotebookName\r\n",
+					"Union all \r\n",
+					"Select '/DimProductcategory' as NotebookName\r\n",
+					"Union all \r\n",
+					"Select '/DimProductmodel' as NotebookName\r\n",
+					"\"\"\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from multiprocessing.pool import ThreadPool\r\n",
+					"pool = ThreadPool(5)\r\n",
+					"notebook = \"Master Notebook Execution\"\r\n",
+					"timeout = 6000\r\n",
+					"\r\n",
+					"notebookExecutionList = df_DimNotebookexecutionlist.collect()\r\n",
+					"notebookExecutionNames = [n.NotebookName for n in notebookExecutionList]\r\n",
+					"pool.map(\r\n",
+					"lambda notebookExecutionNames: run_with_retry(notebookExecutionNames, timeout, max_retries = 3),notebookExecutionNames\r\n",
+					"  )"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df_FactNotebookexecutionlist = sqlContext.sql(\"\"\"\r\n",
+					"Select '/Factsalesorderdetail' as NotebookName\r\n",
+					"\"\"\")"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from multiprocessing.pool import ThreadPool\r\n",
+					"pool = ThreadPool(5)\r\n",
+					"notebook = \"Master Notebook Execution\"\r\n",
+					"timeout = 6000\r\n",
+					"\r\n",
+					"notebookExecutionList = df_FactNotebookexecutionlist.collect()\r\n",
+					"notebookExecutionNames = [n.NotebookName for n in notebookExecutionList]\r\n",
+					"pool.map(\r\n",
+					"lambda notebookExecutionNames: run_with_retry(notebookExecutionNames, timeout, max_retries = 3),notebookExecutionNames\r\n",
+					"  )"
+				],
+				"execution_count": 9
+			}
+		]
+	}
+}

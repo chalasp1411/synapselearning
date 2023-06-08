@@ -1,0 +1,11 @@
+{
+	"name": "KVlkforsynapse",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv-learning-002.vault.azure.net/"
+		}
+	}
+}

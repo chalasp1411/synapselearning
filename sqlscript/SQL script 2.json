@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 2",
+	"properties": {
+		"content": {
+			"query": "CREATE DATABASE synapseserverless\nCOLLATE Latin1_General_100_BIN2_UTF8;\n\nUSE synapseserverless\nGO \nCREATE\nMASTER KEY ENCRYPTION BY PASSWORD = 'Welcome1$Hello@'\n\n\n--CREATE DATABASE SCOPED CREDENTIAL democredential\n--WITH IDENTITY = 'SHARED ACCESS SIGNATURE',\n--SECRET  = 'sv=2021-12-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2023-05-03T11:11:42Z&st=2023-05-03T03:11:42Z&spr=https&sig=vpgsdJGRJu%2F7Qtjjr7EHkfdjXKtxdfUO5s1PdxdxK1M%3D'\n--GO\n\nCREATE DATABASE SCOPED CREDENTIAL ManagedIdentity\nWITH \nIDENTITY = 'Managed Identity'\nGO\n\nCREATE EXTERNAL DATA SOURCE ds_realtimeadfblob1 WITH (\n    LOCATION = 'https://realtimeforadf.blob.core.windows.net',\n    CREDENTIAL = ManagedIdentity\n);\n\n\nCREATE EXTERNAL DATA SOURCE ds_realtimeadfblob WITH (\n    LOCATION = 'https://realtimeforadf.blob.core.windows.net/commondata/Transformdata',\n    CREDENTIAL = ManagedIdentity\n);\n\nCREATE EXTERNAL FILE FORMAT CsvFileformat_CSV\nWITH (FORMAT_TYPE = DELIMITEDTEXT,\n      FORMAT_OPTIONS(\n          FIELD_TERMINATOR = ',',\n          STRING_DELIMITER = '\"',\n          FIRST_ROW = 2,\n          USE_TYPE_DEFAULT = True)\n);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "synapseserverless",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

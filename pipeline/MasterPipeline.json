@@ -1,0 +1,59 @@
+{
+	"name": "MasterPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Executecopyloop",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_copydataforeachloop",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ExecutreMasternotebook",
+				"type": "SynapseNotebook",
+				"dependsOn": [
+					{
+						"activity": "Executecopyloop",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "MasterexecutionNotebook",
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "Sparkpool001",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": "Small",
+					"conf": {
+						"spark.dynamicAllocation.enabled": true
+					},
+					"driverSize": "Small"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-05-08T16:02:25Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

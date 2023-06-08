@@ -1,0 +1,17 @@
+{
+	"name": "DimAddress",
+	"properties": {
+		"content": {
+			"query": "CREATE SCHEMA SalesLT\n\nCREATE EXTERNAL TABLE DimAddress\nWITH\n(\n    LOCATION =  'commondata/Synapse/DimAddress',\n    DATA_SOURCE = ds_realtimeadfblob1,\n    FILE_FORMAT = CsvFileformat_CSV\n    \n\n)\nAS\nSELECT \n*\nFROM\n    OPENROWSET(\n        BULK 'https://realtimeforadf.blob.core.windows.net/commondata/Transformdata/dimaddress/Dimaddress.csv',\n                FORMAT = 'CSV',\n        HEADER_ROW = TRUE,\n        PARSER_VERSION = '2.0'\n    ) AS [result]\n\n\nselect * from DimAddress\n\nselect * from dimaddress1_external_table\n\nCREATE EXTERNAL TABLE dimaddress1_external_table\n(\n    Addressid int\n)  \nWITH (\n    LOCATION = '/dimaddress/Dimaddress.csv',\n    DATA_SOURCE = ds_realtimeadfblob,  \n    FILE_FORMAT = CsvFileformat_CSV\n)\n\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "synapseserverless",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

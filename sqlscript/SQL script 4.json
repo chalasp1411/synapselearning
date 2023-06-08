@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 4",
+	"properties": {
+		"content": {
+			"query": "\ndrop EXTERNAL TABLE DimAddress\n\nCREATE EXTERNAL TABLE DimAddress\n(\n    Addressid int,\n    [Address]  nvarchar(100),\n    city nvarchar(30) ,\n    stateProvince nvarchar(50),\n    countryRegion nvarchar(50),\n    postalcode nvarchar(15)\n)  \nWITH (\n    LOCATION = '/dimaddress/Dimaddress.csv',\n    DATA_SOURCE = ds_realtimeadfblob,  \n    FILE_FORMAT = CsvFileformat_CSV\n)\nGO\n\nselect * from DimAddress\n\n\nCREATE EXTERNAL TABLE dimproduct\n(\n     ProductID int,\n     ProductCategoryID int,\n     ProductModelID int,\n     [Name] nvarchar(50),\n     ProductNumber nvarchar(25),\n     Color nvarchar(15),\n     StandardCost money,\n     ListPrice money,\n     [Size] nvarchar(5),\n     Weight decimal(8,2)\n)  \nWITH (\n    LOCATION = '/dimproduct/Dimproduct.csv',\n    DATA_SOURCE = ds_realtimeadfblob,  \n    FILE_FORMAT = CsvFileformat_CSV\n)\nGO\n\n\nselect * from dimproduct\n\n\n\n\n\nCREATE EXTERNAL TABLE dimcustomer\n(\n    CustomerID int,\n    [Name] nvarchar(100),\n    CompanyName nvarchar(128),\n    SalesPerson nvarchar(256),\n    EmailAddress nvarchar(50),\n    Phone nvarchar(25)\n)  \nWITH (\n    LOCATION = '/dimcustomer/Dimcustomer.csv',\n    DATA_SOURCE = ds_realtimeadfblob,  \n    FILE_FORMAT = CsvFileformat_CSV\n)\nGO\n\n\nselect * from dimcustomer\n\n\ndrop EXTERNAL TABLE dimproductcategory\n\n\nCREATE EXTERNAL TABLE dimproductcategory\n(\n  ProductCategoryID int,\n  ProductName nvarchar(100)\n)  \nWITH (\n    LOCATION = '/dimproductcategory/DimproductCategory.csv',\n    DATA_SOURCE = ds_realtimeadfblob,  \n    FILE_FORMAT = CsvFileformat_CSV\n)\nGO\n\n\n\nselect * from dimproductcategory\n\ndrop EXTERNAL table dimproductmodel\n\nCREATE EXTERNAL TABLE dimproductmodel\n(\nProductModelID int,\n[Name] nvarchar(50)\n)  \nWITH (\n    LOCATION = '/dimproductModel/DimproductModel.csv',\n    DATA_SOURCE = ds_realtimeadfblob,  \n    FILE_FORMAT = CsvFileformat_CSV\n)\nGO\n\n\nselect * from dimproductmodel\n\n\n\ndrop EXTERNAL table Factsalesorderdetail\n\nCREATE EXTERNAL TABLE Factsalesorderdetail\n(\n\nSalesOrderDetailID int,\nSalesOrderID int,\nOrderDate datetime,\nDueDate datetime,\nShipDate datetime,\nCustomerID int,\nShipToAddressID int,\nBillToAddressID int,\nProductID int,\nSalesOrderNumber nvarchar(25),\nPurchaseOrderNumber nvarchar(25),\nAccountNumber nvarchar(25) ,\nOrderQty smallint,\nUnitPrice money,\nUnitPriceDiscount money,\nLineTotal numeric(38,6)\n)  \nWITH (\n    LOCATION = '/factsalesorderdetail/Factsales.csv',\n    DATA_SOURCE = ds_realtimeadfblob,  \n    FILE_FORMAT = CsvFileformat_CSV\n)\nGO\n\n\nselect * from Factsalesorderdetail\n\n\n\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "synapseserverless",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
