@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "sakisri"
+		},
+		"AzureSqlDatabaseforFramework_connectionString": {
+			"value": ""
+		},
+		"KVforrealtimeadf_connectionString": {
+			"value": ""
+		},
+		"sakisri-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:sakisri.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"Adventureworksazuresql_properties_typeProperties_connectionString_secretName": {
+			"value": "Adventureworksdbconnectionstring"
+		},
+		"KVlkforsynapse_properties_typeProperties_baseUrl": {
+			"value": "https://kv-learning-002.vault.azure.net/"
+		},
+		"sakisri-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://sakisri.dfs.core.windows.net"
+		}
+	}
+}
