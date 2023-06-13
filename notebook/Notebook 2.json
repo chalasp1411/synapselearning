@@ -1,5 +1,5 @@
 {
-	"name": "Notebook 1",
+	"name": "Notebook 2",
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "825dfcb0-c844-4648-bf9c-f924adfbcf1e"
+				"spark.autotune.trackingId": "47b92fa6-b7c7-4ca7-b9f9-d530f43f2a39"
 			}
 		},
 		"metadata": {
@@ -49,17 +49,16 @@
 		},
 		"cells": [
 			{
-				"cell_type": "markdown",
-				"metadata": {
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
+				"cell_type": "code",
 				"source": [
-					""
-				]
+					"from notebookutils import mssparkutils\r\n",
+					"mssparkutils.fs.mount(\r\n",
+					"    'abfss://sakisri@sakisri.dfs.core.windows.net',\r\n",
+					"    '/synapse',\r\n",
+					"    {'accountkey':'duzpuHD0Kjv8ZksS4k+G4lxtu4BBcGzO+GCGbM4Le9dUufIE58GrsjNvxh8ZXB36RyfK/tRCU7nJ+AStE7MpKw=='}\r\n",
+					")"
+				],
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -75,10 +74,31 @@
 					}
 				},
 				"source": [
-					"from notebookutils import mssparkutils\r\n",
-					"mssparkutils.credentials.getSecret('kv-learning-002','Adventureworksdbconnectionstring')"
+					"jobId=mssparkutils.env.getJobId()\r\n",
+					"\r\n",
+					"spark.read.load('synfs:/' + jobId + '/sakisri/synapse/Address.csv',format='csv',header=True)\r\n",
+					""
 				],
-				"execution_count": 6
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"\r\n",
+					"mssparkutils.fs.unmount('/synapse')"
+				],
+				"execution_count": 3
 			}
 		]
 	}
